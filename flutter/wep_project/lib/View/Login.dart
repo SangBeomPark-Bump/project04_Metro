@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:wep_project/View/M_Home.dart';
+import 'package:wep_project/View/user_manage.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -132,7 +133,7 @@ if (_formKey.currentState!.validate()) {
   // Function
   checkLG(id, pw){
     if(id == loginCheck[0][0] && pw == loginCheck[0][1]){
-      Get.to(const MHome());
+      Get.to(const UserManage());
     }
   }
 } // End
