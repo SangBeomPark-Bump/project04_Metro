@@ -133,7 +133,9 @@ if (_formKey.currentState!.validate()) {
   // Function
   checkLG(id, pw){
     if(id == loginCheck[0][0] && pw == loginCheck[0][1]){
-      Get.to(const UserManage());
+      Get.to(const MHome());
+      idController.text = "";
+      passwordController.text = "";
     }
   }
 } // End

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:wep_project/View/M_Home.dart';
+import 'package:wep_project/View/dashboard_AD.dart';
 import 'package:wep_project/firebase_options.dart';
 
 import 'View/Login.dart';
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Login(),
+      home: const DashboardAd(),
       debugShowCheckedModeBanner: false,
     );
   }

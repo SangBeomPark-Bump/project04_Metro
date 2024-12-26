@@ -11,18 +11,55 @@ class UserManage extends StatefulWidget {
 }
 
 class _UserManageState extends State<UserManage> {
+  late TextEditingController searchController;
+  late Stream<QuerySnapshot> firebaseState;
+
+  @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+    firebaseState = FirebaseFirestore.instance.collection('User').snapshots();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF0F0F0),
+      backgroundColor: const Color(0xffF0F0F0),
       body: Center(
         child: Column(
           children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 500,
+                height: 30,
+                child: SearchBar(
+                  controller: searchController,
+                  hintText: '이름을 입력하세요',
+                  shadowColor: WidgetStatePropertyAll(Colors.black),
+                  backgroundColor: WidgetStatePropertyAll(Colors.white),
+                  shape: WidgetStateProperty.all(ContinuousRectangleBorder(
+        borderRadius: BorderRadius.circular(20))),
+                  onChanged: (value) {
+                    if (value.isEmpty) {
+                        // 검색어가 비어있으면 전체 데이터 스트림으로 돌아감
+                        firebaseState = FirebaseFirestore.instance.collection('User').snapshots();
+                      } else {
+                        // 검색어에 맞는 데이터 스트림
+                        firebaseState = FirebaseFirestore.instance
+                            .collection('User')
+                            .where('name', isEqualTo: value)
+                            .snapshots();
+                      }
+                      setState(() {});
+                  },
+                ),
+              ),
+            ),
             Container(
               width: 1650,
               height: 50,
               color: Colors.white,
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SizedBox(
@@ -66,7 +103,7 @@ class _UserManageState extends State<UserManage> {
                 )
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
+                padding: EdgeInsets.fromLTRB(0, 0, 200, 0),
                 child: SizedBox(
                 width: 100,
                 child: Text(
@@ -86,8 +123,8 @@ class _UserManageState extends State<UserManage> {
               height: 500,
               color: Colors.white,
               child: StreamBuilder<QuerySnapshot>(
-                  // firebase에 있는 데이터중 music collection의 문서 전체 출력
-                  stream: FirebaseFirestore.instance.collection('User').snapshots(),
+                  // firebase에 있는 데이터중 User collection의 문서 전체 출력
+                  stream: firebaseState,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -95,7 +132,6 @@ class _UserManageState extends State<UserManage> {
                       );
                     }
                     final documents = snapshot.data!.docs;
-                    print(documents.toList());
                     return ListView(
                       // map형식으로 되어있는 데이터를 list로 변환
                       children: documents.map((e) => buildItemWidgets(e)).toList(),
@@ -127,7 +163,7 @@ class _UserManageState extends State<UserManage> {
               width: 100,
               child: Text(
                 user.nickname,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17
                 ),
                 textAlign: TextAlign.center,
@@ -137,7 +173,7 @@ class _UserManageState extends State<UserManage> {
               width: 100,
               child: Text(
                 user.name,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17
                 ),
                 textAlign: TextAlign.center,
@@ -147,7 +183,7 @@ class _UserManageState extends State<UserManage> {
               width: 100,
               child: Text(
                 user.userState,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17
                 ),
                 textAlign: TextAlign.center,
@@ -157,7 +193,7 @@ class _UserManageState extends State<UserManage> {
               width: 100,
               child: Text(
                 user.addDate,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17
                 ),
                 textAlign: TextAlign.center,
@@ -167,7 +203,7 @@ class _UserManageState extends State<UserManage> {
               width: 100,
               child: Text(
                 user.recentDate,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17
                 ),
                 textAlign: TextAlign.center,
