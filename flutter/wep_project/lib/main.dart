@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:wep_project/View/M_Home.dart';
 import 'package:wep_project/View/dashboard_AD.dart';
+import 'package:wep_project/View/test_insert.dart';
 import 'package:wep_project/firebase_options.dart';
 
 import 'View/Login.dart';
