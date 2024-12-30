@@ -52,12 +52,19 @@ class _LoginState extends State<Login> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                '관리자 페이지 로그인(임시)',
-                style: TextStyle(
-                  fontSize: 30
+              Image.asset(
+                'images/mainIcon.png',
                 ),
-                ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 70, 0, 0),
+                child: Text(
+                  '관리자 로그인',
+                  style: TextStyle(
+                    fontSize: 35,
+                    color: Color(0xff6B6B6B)
+                  ),
+                  ),
+              ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(500, 40, 500, 20),
                   child: TextFormField(

@@ -28,6 +28,7 @@ class _DashboardAdState extends State<DashboardAd> {
   late String formattedDate;
   late Future<List<ImageItem>> _imageList;
   late List addList;
+  late List testList;
 
 
   @override
@@ -36,10 +37,25 @@ class _DashboardAdState extends State<DashboardAd> {
     adCount = 0;
     vitConunt = 0;
     addList = [];
+    testList = [];
     today = DateTime.now();
     formattedDate = DateFormat('yyyy-MM-dd').format(today);
     _imageList = fetchImages();
     getJSONAddData();
+    getJSONTestData();
+  }
+  getJSONTestData() async {
+    var url = Uri.parse('http://127.0.0.1:8000/AdList/test');
+    var response = await http.get(url);
+    testList.clear();
+    var dataConvertedJSON = json.decode(utf8.decode(response.bodyBytes));
+    List result = dataConvertedJSON['results'];
+    testList.addAll(result);
+    print(testList);
+    // mounted 값이 true일 때만 setState 호출
+  if (mounted) {
+    setState(() {});
+  }
   }
   getJSONAddData() async {
     var url = Uri.parse('http://127.0.0.1:8000/AdAdd/Add_check');
@@ -327,7 +343,7 @@ class _DashboardAdState extends State<DashboardAd> {
                                     padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        Get.to(const TestInsert());
+                                        Get.to(const TestInsert())!.then((value) => reloadData(),);
                                       }, 
                                       style: ElevatedButton.styleFrom(
                                           backgroundColor: Color(0xffFF7777),
@@ -384,7 +400,7 @@ class _DashboardAdState extends State<DashboardAd> {
                                 height: 450,
                                 color: Colors.white,
                                 child: FutureBuilder(
-                                  future: _imageList, 
+                                  future: Future.wait([Future.value(_imageList), Future.value(testList)]),
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -393,12 +409,15 @@ class _DashboardAdState extends State<DashboardAd> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No images found.'));
           }else {
-            final images = snapshot.data!;
+            List results = snapshot.data as List;
+            var images = results[0];
+            var name = results[1];
+            // final images = snapshot.data!;
             return ListView.builder(
               itemCount: images.length,
               itemBuilder: (context, index) {
                 final image = images[index];
-                print(image.cpName);
+                // print(image.cpName);
                 return Center(
                   child: Column(
                     children: [
@@ -406,7 +425,7 @@ class _DashboardAdState extends State<DashboardAd> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                 
-                          Text(image.cpName, style: TextStyle(fontSize: 16)),
+                          Text(name[index][1], style: TextStyle(fontSize: 16)),
                           Image.memory(
                             base64Decode(image.imageData),
                             width: 50,
@@ -595,6 +614,12 @@ class _DashboardAdState extends State<DashboardAd> {
                                                 ),
                                                 textAlign: TextAlign.center,
                                                 ),
+                                                Text('${addList[index][0]}',
+                                                style: TextStyle(
+                                                  fontSize: 20
+                                                ),
+                                                textAlign: TextAlign.center,
+                                                ),
                                                 Text('${addList[index][3]}',
                                                 style: TextStyle(
                                                   fontSize: 20
@@ -602,12 +627,6 @@ class _DashboardAdState extends State<DashboardAd> {
                                                 textAlign: TextAlign.center,
                                                 ),
                                                 Text('${addList[index][4]}',
-                                                style: TextStyle(
-                                                  fontSize: 20
-                                                ),
-                                                textAlign: TextAlign.center,
-                                                ),
-                                                Text('${addList[index][5]}',
                                                 style: TextStyle(
                                                   fontSize: 20
                                                 ),
@@ -725,4 +744,12 @@ class _DashboardAdState extends State<DashboardAd> {
         ),
       );
   }
-}
+
+  // Function
+  reloadData(){
+    getJSONAddData();
+    getJSONTestData();
+    _imageList = fetchImages();
+    setState(() {});
+  }
+} // End

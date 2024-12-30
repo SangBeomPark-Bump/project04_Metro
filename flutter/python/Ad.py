@@ -23,10 +23,11 @@ def encode_image(image_data):
     return base64.b64encode(image_data).decode('utf-8')
 # 테이블 정의
 class Image(Base):
-    __tablename__ = 'test_image'
+    __tablename__ = 'Bn_list'
     id = Column(Integer, primary_key=True, index=True)
     cp_name = Column(String(255), nullable=False)
     data = Column(MEDIUMBLOB, nullable=False)
+
 
 # 테이블 생성
 Base.metadata.create_all(bind=engine)

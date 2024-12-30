@@ -22,7 +22,7 @@ def encode_image(image_data):
 async def select():
     conn = connection()
     curs = conn.cursor(pymysql.cursors.DictCursor)  # 딕셔너리 커서 사용
-    sql = "SELECT id, data, cp_name FROM test_image"
+    sql = "SELECT id, cp_name, data FROM Bn_list"
     curs.execute(sql)
     rows = curs.fetchall()
     conn.close()
@@ -30,6 +30,18 @@ async def select():
     for row in rows:
         if row['data']:  # 데이터가 존재할 경우
             row['data'] = encode_image(row['data'])  # Base64로 인코딩
+    
+    # 결과값 반환
+    return {'results': rows}
+
+@router.get('/test')
+async def select():
+    conn = connection()
+    curs = conn.cursor()  # 딕셔너리 커서 사용
+    sql = "SELECT id, cp_name FROM Bn_list"
+    curs.execute(sql)
+    rows = curs.fetchall()
+    conn.close()
     
     # 결과값 반환
     return {'results': rows}

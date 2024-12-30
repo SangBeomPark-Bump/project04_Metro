@@ -19,7 +19,7 @@ async def select():
     conn = connection()
     curs = conn.cursor()
     # 결과값을 딕셔너리로 변환할때 쓰이는 SQL문장
-    sql = "SELECT * FROM Ad_add"
+    sql = "SELECT * FROM Ad_list"
     # sql = "select * from student"
     curs.execute(sql)
     rows = curs.fetchall()
@@ -27,3 +27,19 @@ async def select():
     print(rows)
     # 데이터가 많을때 쓰는 방법
     return {'results' : rows}
+
+@router.get("/Add_name")
+async def select():
+    conn = connection()
+    curs = conn.cursor()
+    # 결과값을 딕셔너리로 변환할때 쓰이는 SQL문장
+    sql = "SELECT name FROM Ad_list"
+    # sql = "select * from student"
+    curs.execute(sql)
+    rows = curs.fetchall()
+    conn.close()
+    print(rows)
+    # 데이터가 많을때 쓰는 방법
+    return {'results' : rows}
+
+# @router.get("Add_delete")
