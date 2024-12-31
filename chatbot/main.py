@@ -13,7 +13,7 @@ def read_root():
 def read_item(userMessage: str):
     # time.sleep(2)
 
-    url = "https://28cf-35-233-227-72.ngrok-free.app/"
+    url = "https://1065-34-125-40-87.ngrok-free.app/"
 
     # sampleChat = "I want to go to GangNam, let me know when the density is highest."
     # chat = f"query?query={sampleChat}"
